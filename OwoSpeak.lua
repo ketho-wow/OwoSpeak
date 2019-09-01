@@ -25,7 +25,7 @@ function SendChatMessage(msg, ...)
 	local owo = owos[random(#owos)]
 	local whatsthis = random(10)
 	-- tempowawiwy wepwace winks with owos
-	s = msg:gsub("|c.-|r", ReplaceLink)
+	local s = msg:gsub("|c.-|r", ReplaceLink)
 	s = s:gsub("[LR]", "W")
 	s = s:gsub("[lr]", "w")
 	s = s:gsub("ith", "if")
