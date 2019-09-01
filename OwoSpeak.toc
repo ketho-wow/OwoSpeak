@@ -8,6 +8,7 @@
 ## Title: OwoSpeak
 ## Notes: Pwease owo wesponsibwy
 ## Author: Ketho
+## SavedVariables: OwoSpeakDB
 ## X-Curse-Project-ID: 339039
 ## X-WoWI-ID: 25199
 
