@@ -49,7 +49,9 @@ function SendChatMessage(msg, ...)
 		local whatsthis = random(10)
 		-- tempowawiwy wepwace winks with owos
 		local s = msg:gsub("|c.-|r", ReplaceLink)
+		s = s:gsub("[LR]", "W")
 		s = s:gsub("[lr]", "w")
+		s = s:gsub("U([^VW])", "UW%1")
 		s = s:gsub("u([^vw])", "uw%1")
 		s = s:gsub("ith " , "if ")
 		s = whatsthis <= 7 and s:gsub("([fps])([aeio]%w+)", "%1w%2") or s
