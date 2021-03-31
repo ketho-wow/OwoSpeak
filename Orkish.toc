@@ -1,0 +1,11 @@
+## Interface: 11304
+## Version: 1.0
+## Title: Orkish
+## Notes: Purge indiscriminately
+## Author: Asatas
+## SavedVariables: OrkishDB
+## X-Curse-Project-ID: 339039
+## X-WoWI-ID: 25199
+
+
+Orkish.lua
