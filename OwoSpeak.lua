@@ -9,8 +9,9 @@ local owos = {
 }
 
 local defaults = {
-	db_version = 1,
+	db_version = 2,
 	enabled = true,
+	guild = true,
 }
 
 local db
@@ -18,10 +19,13 @@ local hyperlinks = {}
 
 local function OnEvent(self, event, addon)
 	if addon == "OwoSpeak" then
-		if not OwoSpeakDB or OwoSpeakDB.db_version < defaults.db_version then
-			OwoSpeakDB = CopyTable(defaults)
-		end
+		OwoSpeakDB = OwoSpeakDB or CopyTable(defaults)
 		db = OwoSpeakDB
+		for k, v in pairs(defaults) do
+			if db[k] == nil then
+				db[k] = v
+			end
+		end
 		self:UnregisterEvent("ADDON_LOADED")
 	end
 end
@@ -40,10 +44,20 @@ local function RestoreLink(s)
 	return hyperlinks[n]
 end
 
+local function ShouldOwo(chatType)
+	if db.enabled then
+		if chatType == "GUILD" then
+			return db.guild
+		else
+			return true
+		end
+	end
+end
+
 local makeowo = SendChatMessage
 
-function SendChatMessage(msg, ...)
-	if db.enabled then
+function SendChatMessage(msg, chatType, ...)
+	if ShouldOwo(chatType) then
 		wipe(hyperlinks)
 		local owo = owos[random(#owos)]
 		local whatsthis = random(10)
@@ -71,9 +85,9 @@ function SendChatMessage(msg, ...)
 		s = whatsthis == 1 and s.." "..owo or s:gsub("!$", " "..owo)
 		-- pwease owo wesponsibwy
 		s = #s <= 255 and s:gsub("owo%d", RestoreLink) or msg
-		makeowo(s, ...)
+		makeowo(s, chatType, ...)
 	else
-		makeowo(msg, ...)
+		makeowo(msg, chatType, ...)
 	end
 end
 
@@ -85,7 +99,12 @@ local EnabledMsg = {
 SLASH_OWOSPEAK1 = "/owo"
 SLASH_OWOSPEAK2 = "/owospeak"
 
-SlashCmdList.OWOSPEAK = function()
-	db.enabled = not db.enabled
-	print("OwoSpeak: "..EnabledMsg[db.enabled])
+SlashCmdList.OWOSPEAK = function(msg)
+	if msg == "guild" then
+		db.guild = not db.guild
+		print("OwoSpeak: Guild - "..EnabledMsg[db.guild])
+	else
+		db.enabled = not db.enabled
+		print("OwoSpeak: "..EnabledMsg[db.enabled])
+	end
 end
