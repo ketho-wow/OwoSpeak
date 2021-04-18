@@ -18,12 +18,10 @@ jobs:
 
       - uses: BigWigsMods/packager@master
         with:
-          args: release.sh -g classic
+          args: -g classic
 
       - uses: BigWigsMods/packager@master
         with:
-          args: release.sh -g bc
+          args: -g bc
 
       - uses: BigWigsMods/packager@master
-        with:
-          args: release.sh
