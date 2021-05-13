@@ -47,15 +47,16 @@ local function RestoreLink(s)
 end
 
 local channelOptions = {
-	GUILD = function() return db.guild end,
-	OFFICER = function() return db.officer end,
-	WHISPER = function() return db.whisper end,
+	GUILD = "guild",
+	OFFICER = "officer",
+	WHISPER = "whisper",
 }
 
 local function ShouldOwo(chatType)
 	if db.enabled then
-		if channelOptions[chatType] then
-			return channelOptions[chatType]()
+		local option = channelOptions[chatType]
+		if option then
+			return db[option]
 		else
 			return true
 		end
