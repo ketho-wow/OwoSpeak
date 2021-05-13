@@ -9,7 +9,6 @@ local owos = {
 }
 
 local defaults = {
-	db_version = 2,
 	enabled = true,
 	guild = true,
 	officer = true,
@@ -36,6 +35,7 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", OnEvent)
 
+-- owo1, owo2, etc pwacehowdews
 local function ReplaceLink(s)
 	tinsert(hyperlinks, s)
 	return "owo"..#hyperlinks
@@ -46,20 +46,18 @@ local function RestoreLink(s)
 	return hyperlinks[n]
 end
 
+local channelOptions = {
+	GUILD = function() return db.guild end,
+	OFFICER = function() return db.officer end,
+	WHISPER = function() return db.whisper end,
+}
+
 local function ShouldOwo(chatType)
 	if db.enabled then
-		if chatType == "GUILD" then
-			return db.guild
+		if channelOptions[chatType] then
+			return channelOptions[chatType]()
 		else
-			if chatType == "OFFICER" then
-				return db.officer
-			else
-				if chatType == "WHISPER" then
-					return db.whisper
-				else
-					return true
-				end
-			end
+			return true
 		end
 	end
 end
@@ -74,7 +72,7 @@ function SendChatMessage(msg, chatType, ...)
 		-- tempowawiwy wepwace winks wif owos
 		local s = msg:gsub("|c.-|r", ReplaceLink)
 		-- wepwace waid mawkews
-		s = s:gsub("{rt", ReplaceLink)
+		s = s:gsub("{.-}", ReplaceLink)
 		s = s:gsub("[LR]", "W")
 		s = s:gsub("[lr]", "w")
 		if whatsthis <= 5 then
@@ -108,25 +106,25 @@ local EnabledMsg = {
 	[false] = "|cffFF2424Disabwed|r",
 }
 
+local function PrintMessage(msg)
+	print("OwoSpeak: "..msg)
+end
+
 SLASH_OWOSPEAK1 = "/owo"
 SLASH_OWOSPEAK2 = "/owospeak"
 
 SlashCmdList.OWOSPEAK = function(msg)
 	if msg == "guild" then
 		db.guild = not db.guild
-		print("OwoSpeak: Guild - "..EnabledMsg[db.guild])
+		PrintMessage("Guild - "..EnabledMsg[db.guild])
+	elseif msg == "officer" then
+		db.officer = not db.officer
+		PrintMessage("Officer - "..EnabledMsg[db.officer])
+	elseif msg == "whisper" then
+		db.whisper = not db.whisper
+		PrintMessage("Whisper - "..EnabledMsg[db.whisper])
 	else
-		if msg == "officer" then
-			db.officer = not db.officer
-			print("OwoSpeak: Officer - "..EnabledMsg[db.officer])
-		else
-			if msg == "whisper" then
-				db.whisper = not db.whisper
-				print("OwoSpeak: Whisper - "..EnabledMsg[db.whisper])
-			else		
-				db.enabled = not db.enabled
-				print("OwoSpeak: "..EnabledMsg[db.enabled])
-			end
-		end
+		db.enabled = not db.enabled
+		PrintMessage(EnabledMsg[db.enabled])
 	end
 end
