@@ -12,6 +12,8 @@ local defaults = {
 	db_version = 2,
 	enabled = true,
 	guild = true,
+	officer = true,
+	whisper = true,
 }
 
 local db
@@ -49,7 +51,15 @@ local function ShouldOwo(chatType)
 		if chatType == "GUILD" then
 			return db.guild
 		else
-			return true
+			if chatType == "OFFICER" then
+				return db.officer
+			else
+				if chatType == "WHISPER" then
+					return db.whisper
+				else
+					return true
+				end
+			end
 		end
 	end
 end
@@ -63,6 +73,8 @@ function SendChatMessage(msg, chatType, ...)
 		local whatsthis = random(10)
 		-- tempowawiwy wepwace winks wif owos
 		local s = msg:gsub("|c.-|r", ReplaceLink)
+		-- wepwace waid mawkews
+		s = s:gsub("{rt", ReplaceLink)
 		s = s:gsub("[LR]", "W")
 		s = s:gsub("[lr]", "w")
 		if whatsthis <= 5 then
@@ -104,7 +116,17 @@ SlashCmdList.OWOSPEAK = function(msg)
 		db.guild = not db.guild
 		print("OwoSpeak: Guild - "..EnabledMsg[db.guild])
 	else
-		db.enabled = not db.enabled
-		print("OwoSpeak: "..EnabledMsg[db.enabled])
+		if msg == "officer" then
+			db.officer = not db.officer
+			print("OwoSpeak: Officer - "..EnabledMsg[db.officer])
+		else
+			if msg == "whisper" then
+				db.whisper = not db.whisper
+				print("OwoSpeak: Whisper - "..EnabledMsg[db.whisper])
+			else		
+				db.enabled = not db.enabled
+				print("OwoSpeak: "..EnabledMsg[db.enabled])
+			end
+		end
 	end
 end
