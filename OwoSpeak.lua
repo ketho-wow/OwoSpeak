@@ -15,12 +15,19 @@ local defaults = {
 	whisper = true,
 }
 
+local blockedChannelsDefaults = {
+	"NewcomerChat",
+}
+
 local db
+local blockedChannels
 local hyperlinks = {}
 
 local function OnEvent(self, event, addon)
 	if addon == "OwoSpeak" then
 		OwoSpeakDB = OwoSpeakDB or CopyTable(defaults)
+		OwoSpeakDBBlockedChannels = OwoSpeakDBBlockedChannels or CopyTable(blockedChannelsDefaults)
+		blockedChannels = OwoSpeakDBBlockedChannels
 		db = OwoSpeakDB
 		for k, v in pairs(defaults) do
 			if db[k] == nil then
@@ -47,26 +54,40 @@ local function RestoreLink(s)
 end
 
 local channelOptions = {
-	GUILD = "guild",
-	OFFICER = "officer",
-	WHISPER = "whisper",
+	GUILD = function() return db.guild end,
+	OFFICER = function() return db.officer end,
+	WHISPER = function() return db.whisper end,
 }
 
 local function ShouldOwo(chatType)
 	if db.enabled then
-		local option = channelOptions[chatType]
-		if option then
-			return db[option]
+		if channelOptions[chatType] then
+			return channelOptions[chatType]()
 		else
 			return true
 		end
 	end
 end
 
+local function ShouldOwoTwo(chatType, channel)
+	if chatType == "CHANNEL" then
+		id, channelName = GetChannelName(channel)
+
+		for key, value in pairs(blockedChannels) do
+			if channelName == value then
+				-- print("Found " .. channelName .. " in blockedChannels table.  Do not owo")
+				return false
+			end
+		end
+	end
+	-- print("Did not find " .. channelName .. " in blockedChannels table.  owo away!")
+	return true
+end
+
 local makeowo = SendChatMessage
 
-function SendChatMessage(msg, chatType, ...)
-	if ShouldOwo(chatType) then
+function SendChatMessage(msg, chatType, language, channel)
+	if ShouldOwo(chatType) and ShouldOwoTwo(chatType, channel) then
 		wipe(hyperlinks)
 		local owo = owos[random(#owos)]
 		local whatsthis = random(10)
@@ -96,9 +117,9 @@ function SendChatMessage(msg, chatType, ...)
 		s = whatsthis == 1 and s.." "..owo or s:gsub("!$", " "..owo)
 		-- pwease owo wesponsibwy
 		s = #s <= 255 and s:gsub("owo%d", RestoreLink) or msg
-		makeowo(s, chatType, ...)
+		makeowo(s, chatType, language, channel)
 	else
-		makeowo(msg, chatType, ...)
+		makeowo(msg, chatType, language, channel)
 	end
 end
 
@@ -114,6 +135,14 @@ end
 SLASH_OWOSPEAK1 = "/owo"
 SLASH_OWOSPEAK2 = "/owospeak"
 
+function tablefind(tab,el)
+    for index, value in pairs(tab) do
+        if value == el then
+            return index
+        end
+    end
+end
+
 SlashCmdList.OWOSPEAK = function(msg)
 	if msg == "guild" then
 		db.guild = not db.guild
@@ -124,6 +153,50 @@ SlashCmdList.OWOSPEAK = function(msg)
 	elseif msg == "whisper" then
 		db.whisper = not db.whisper
 		PrintMessage("Whisper - "..EnabledMsg[db.whisper])
+	elseif string.find(msg, "add") then
+		exploded = {}
+		for substring in string.gmatch(msg, "[^%s]+") do
+		   table.insert(exploded, substring)
+		end
+		if exploded[2] then
+			table.insert(blockedChannels, exploded[2])
+			PrintMessage("Added " .. exploded[2] .. " to the blocked channel list.")
+		else
+			PrintMessage("You must provide a channel name to block.")
+		end
+	elseif string.find(msg, "remove") then
+		exploded = {}
+		foundAndRemoved = false
+		for substring in string.gmatch(msg, "[^%s]+") do
+		   table.insert(exploded, substring)
+		end
+		if exploded[2] then
+			for key, value in pairs(blockedChannels) do
+				if value == exploded[2] then
+					PrintMessage("Removed " .. exploded[2] .. " from the blocked channels list.")
+					table.remove(blockedChannels, tablefind(blockedChannels, exploded[2]))
+					foundAndRemoved = true
+				end
+			end
+			if foundAndRemoved == false then
+				PrintMessage("Could not find the specified channel in the blocked channels list.")
+			end
+		else
+			PrintMessage("You must provide a channel name to unblock.")
+		end
+	elseif msg == "blocked" then
+		PrintMessage("Currently blocked channels:")
+		for key, value in pairs(blockedChannels) do
+			print(value)
+		end
+	elseif msg == "help" then
+		PrintMessage("Available commands:")
+		print("/owo guild - enable/disable guild chat owospeak")
+		print("/owo officer - enable/disable officer chat owospeak")
+		print("/owo whisper - enable/disable whisper owospeak")
+		print("/owo add <channel name> - prevent owospeak in a specific channel")
+		print("/owo remove <channel name> - re-enable owospeak in a blocked channel (see /owo add)")
+		print("/owo blocked - print list of currently blocked channels")
 	else
 		db.enabled = not db.enabled
 		PrintMessage(EnabledMsg[db.enabled])

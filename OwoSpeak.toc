@@ -1,11 +1,12 @@
-## Interface-Retail: 90005
+## Interface-Retail: 90207
 ## Interface-Classic: 11307
 ## Interface-BC: 20501
 ## Version: @project-version@
+## Version: 1.0.9
 ## Title: OwoSpeak
 ## Notes: Pwease owo wesponsibwy
 ## Author: Ketho
-## SavedVariables: OwoSpeakDB
+## SavedVariables: OwoSpeakDB, OwoSpeakDBBlockedChannels
 ## X-Curse-Project-ID: 339039
 ## X-WoWI-ID: 25199
 
