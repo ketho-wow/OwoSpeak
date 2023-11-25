@@ -1,5 +1,18 @@
 {
 	"Lua.diagnostics.globals": [
-		"SlashCmdList"
+		"SlashCmdList",
+		"CreateFrame",
+		"tinsert",
+		"wipe",
+		"CopyTable",
+		"random",
+		"format",
+		"gmatch",
+		"print",
+		"tonumber",
+		"pairs",
+		"string",
+		"GetChannelName",
+		"table"
 	]
 }

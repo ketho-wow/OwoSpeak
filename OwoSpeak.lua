@@ -71,7 +71,7 @@ end
 
 local function ShouldOwoTwo(chatType, channel)
 	if chatType == "CHANNEL" then
-		id, channelName = GetChannelName(channel)
+		local id, channelName = GetChannelName(channel)
 
 		for key, value in pairs(blockedChannels) do
 			if channelName == value then
@@ -87,6 +87,10 @@ end
 local makeowo = SendChatMessage
 
 function SendChatMessage(msg, chatType, language, channel)
+	-- im so sowwy meo
+	if msg == "GHI2ChannelReadyCheck" then
+		return
+	end
 	if ShouldOwo(chatType) and ShouldOwoTwo(chatType, channel) then
 		wipe(hyperlinks)
 		local owo = owos[random(#owos)]
@@ -105,7 +109,7 @@ function SendChatMessage(msg, chatType, language, channel)
 		        return 'w' .. following
 		    end
 		end)
-		
+
 		s = s:gsub("([LR])([%S]*S?)", function(L, following)
 		    if L == 'R' and following == 'S' then
 		        return 'R' .. following
@@ -123,10 +127,9 @@ function SendChatMessage(msg, chatType, language, channel)
 		s = s:gsub("([fps])([aeio]%w+)", "%1w%2") or s
 		s = s:gsub("n([aeiou]%w)", "ny%1") or s
 		s = s:gsub(" th", " d") or s
-		-- y-you awe such a b-baka
 		s = format(" %s ", s)
 		for k in gmatch(s, "%a+") do
-			if random(10) == 1 then
+			if random(12) == 1 then
 				local firstChar = k:sub(1, 1)
 				s = s:gsub(format(" %s ", k), format(" %s-%s ", firstChar, k))
 			end
@@ -153,7 +156,7 @@ end
 SLASH_OWOSPEAK1 = "/owo"
 SLASH_OWOSPEAK2 = "/owospeak"
 
-function tablefind(tab,el)
+local function tablefind(tab,el)
     for index, value in pairs(tab) do
         if value == el then
             return index
@@ -172,7 +175,7 @@ SlashCmdList.OWOSPEAK = function(msg)
 		db.whisper = not db.whisper
 		PrintMessage("Whisper - "..EnabledMsg[db.whisper])
 	elseif string.find(msg, "add") then
-		exploded = {}
+		local exploded = {}
 		for substring in string.gmatch(msg, "[^%s]+") do
 		   table.insert(exploded, substring)
 		end
@@ -183,8 +186,8 @@ SlashCmdList.OWOSPEAK = function(msg)
 			PrintMessage("You must provide a channel name to block.")
 		end
 	elseif string.find(msg, "remove") then
-		exploded = {}
-		foundAndRemoved = false
+		local exploded = {}
+		local foundAndRemoved = false
 		for substring in string.gmatch(msg, "[^%s]+") do
 		   table.insert(exploded, substring)
 		end
