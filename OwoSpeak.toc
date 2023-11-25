@@ -2,7 +2,6 @@
 ## Interface-Wrath: 30403
 ## Interface-Classic: 11404
 ## Version: @project-version@
-## Version: 1.1.0
 ## Title: OwoSpeak
 ## Notes: Pwease owo wesponsibwy
 ## Author: Ketho
