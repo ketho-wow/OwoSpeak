@@ -93,10 +93,28 @@ function SendChatMessage(msg, chatType, language, channel)
 		local whatsthis = random(10)
 		-- tempowawiwy wepwace winks wif owos
 		local s = msg:gsub("|c.-|r", ReplaceLink)
-		-- wepwace waid mawkews
+		-- wepwace waid mawkers
+		-- pwacehowders
 		s = s:gsub("{.-}", ReplaceLink)
-		s = s:gsub("[LR]", "W")
-		s = s:gsub("[lr]", "w")
+		s = s:gsub("([lr])([%S]*s?)", function(l, following)
+		    if l == 'r' and following == 's' then
+		        return 'r' .. following
+		    elseif l == 'R' and following == 's' then
+		        return 'R' .. following
+		    else
+		        return 'w' .. following
+		    end
+		end)
+		
+		s = s:gsub("([LR])([%S]*S?)", function(L, following)
+		    if L == 'R' and following == 'S' then
+		        return 'R' .. following
+		    elseif L == 'L' then
+		        return 'W' .. following
+		    else
+		        return 'W' .. following
+		    end
+		end)
 		if whatsthis <= 5 then
 			s = s:gsub("U([^VW])", "UW%1")
 			s = s:gsub("u([^vw])", "uw%1")
