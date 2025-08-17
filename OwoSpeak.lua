@@ -87,7 +87,6 @@ end
 local makeowo
 
 local function owo(msg, chatType, language, channel)
-	print(msg, chatType, language, channel)
 	-- im so sowwy meo
 	if msg == "GHI2ChannelReadyCheck" then
 		return
