@@ -1,10 +1,32 @@
-## Interface: 110200, 50500, 11507
+## Interface: 120001, 50503, 20505, 11508
 ## Version: @project-version@
 ## Title: OwoSpeak
-## Notes: Pwease owo wesponsibwy
+## Notes: uwu
 ## Author: Ketho
-## SavedVariables: OwoSpeakDB, OwoSpeakDBBlockedChannels
+## SavedVariables: OwoSpeakDB3
+## IconTexture: Interface\AddOns\OwoSpeak\icon.png
 ## X-Curse-Project-ID: 339039
 ## X-WoWI-ID: 25199
+## X-Wago-ID: 5NR8ZwK3
+
+## Category: Chat
+## Category-deDE: Chat
+## Category-esES: Chat
+## Category-esMX: Chat
+## Category-frFR: Discussion
+## Category-itIT: Chat
+## Category-koKR: 대화
+## Category-ptBR: Bate-papo
+## Category-ruRU: Чат
+## Category-zhCN: 聊天
+## Category-zhTW: 對話
+
+#@no-lib-strip@
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+Libs\AceGUI-3.0\AceGUI-3.0.xml
+Libs\AceConfig-3.0\AceConfig-3.0.xml
+#@end-no-lib-strip@
 
 OwoSpeak.lua
+owo.lua
