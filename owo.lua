@@ -28,6 +28,7 @@ end
 function OwoSpeak.owoify(text, stutterChance, emoticonChance)
     stutterChance = stutterChance or 0.15
     emoticonChance = emoticonChance or 0.4
+
     -- do not owo the winks
     text = SubstituteLinks(text)
 

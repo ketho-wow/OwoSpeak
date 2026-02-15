@@ -128,11 +128,14 @@ function f:CHANNEL_UI_UPDATE()
 end
 
 function OwoSpeak:shouldowo(chatType, target)
-    if chatType == "CHANNEL" then
-        return OwoSpeak.db[chatType..target]
-    else
-        return OwoSpeak.db[chatType]
-    end
+	if not OwoSpeak.db.enabled then
+		return false
+	end
+	if chatType == "CHANNEL" then
+		return OwoSpeak.db[chatType..target]
+	else
+		return OwoSpeak.db[chatType]
+	end
 end
 
 f:RegisterEvent("ADDON_LOADED")
@@ -142,6 +145,7 @@ f:SetScript("OnEvent", f.OnEvent)
 
 SLASH_OWOSPEAK1 = "/owospeak"
 SLASH_OWOSPEAK2 = "/owo"
+
 SlashCmdList.OWOSPEAK = function()
 	ACD:SetDefaultSize(NAME, 420, 420)
 	ACD:Open(NAME)
