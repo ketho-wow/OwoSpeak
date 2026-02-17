@@ -8,10 +8,10 @@ local defaults = {
 	enabled = true,
 	SAY = true,
 	YELL = true,
+	INSTANCE_CHAT = true,
 	EMOTE = false,
 	PARTY = true,
 	RAID = false,
-	INSTANCE_CHAT = true,
 	GUILD = true,
 	OFFICER = false,
 	WHISPER = false,
@@ -72,6 +72,9 @@ C_Timer.After(1, function()
 			end,
 		}
 	end
+	if not C_GuildInfo.IsGuildOfficer() then
+		options.args.chat.args.OFFICER = nil
+	end
 end)
 
 local f = CreateFrame("Frame")
@@ -128,13 +131,13 @@ function f:CHANNEL_UI_UPDATE()
 end
 
 function OwoSpeak:shouldowo(chatType, target)
-	if not OwoSpeak.db.enabled then
+	if not self.db.enabled then
 		return false
 	end
 	if chatType == "CHANNEL" then
-		return OwoSpeak.db[chatType..target]
+		return self.db[chatType..target]
 	else
-		return OwoSpeak.db[chatType]
+		return self.db[chatType]
 	end
 end
 
