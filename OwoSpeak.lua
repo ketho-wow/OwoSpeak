@@ -84,9 +84,10 @@ local function ShouldOwoTwo(chatType, channel)
 	return true
 end
 
-local makeowo = SendChatMessage
+local makeowo
 
-function SendChatMessage(msg, chatType, language, channel)
+local function owo(msg, chatType, language, channel)
+	print(msg, chatType, language, channel)
 	-- im so sowwy meo
 	if msg == "GHI2ChannelReadyCheck" then
 		return
@@ -142,6 +143,14 @@ function SendChatMessage(msg, chatType, language, channel)
 	else
 		makeowo(msg, chatType, language, channel)
 	end
+end
+
+if C_ChatInfo.SendChatMessage then
+	makeowo = C_ChatInfo.SendChatMessage
+	C_ChatInfo.SendChatMessage = owo
+else
+	makeowo = SendChatMessage
+	SendChatMessage = owo
 end
 
 local EnabledMsg = {
