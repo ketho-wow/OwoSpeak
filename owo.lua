@@ -94,6 +94,6 @@ local function owo(message, context)
 	return Owospeak.owoify(message);
 end
 
-local stage = LCF.Stage.FINALIZE_TRANSFORM; -- wuns aftew othew message twansfowms
+local stage = LCF.Stage.EXCLUSIVE_TRANSFORM; -- wuns aftew othew message twansfowms
 local track = LCF.Track.SEND; -- pwevents modifying the chat histowy buffew
 LCF.RegisterMutator(owo, stage, track);
