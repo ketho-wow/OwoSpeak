@@ -1,3 +1,5 @@
+local LCF = LibStub("LibChatFilter")
+
 local emoticons = {
 	"owo",
 	"uwu",
@@ -84,15 +86,14 @@ function OwoSpeak.owoify(text, stutterChance, emoticonChance)
 	return text
 end
 
-local makeowo = C_ChatInfo.SendChatMessage
-
----@diagnostic disable-next-line: duplicate-set-field
-C_ChatInfo.SendChatMessage = function(message, chatType, languageID, target)
-	if OwoSpeak:shouldowo(chatType, target) then
-		local owofied = OwoSpeak.owoify(message)
-		if #owofied < 255 then
-			message = owofied
-		end
+local function owo(message, context)
+	if not Owospeak:shouldowo(context.chatType, context.target) then
+		return;
 	end
-	makeowo(message, chatType, languageID, target)
+
+	return Owospeak.owoify(message);
 end
+
+local stage = LCF.Stage.EXCLUSIVE_TRANSFORM; -- wuns aftew othew message twansfowms
+local track = LCF.Track.SEND; -- pwevents modifying the chat histowy buffew
+LCF.RegisterMutator(owo, stage, track);
