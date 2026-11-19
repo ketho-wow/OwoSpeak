@@ -87,11 +87,11 @@ function OwoSpeak.owoify(text, stutterChance, emoticonChance)
 end
 
 local function owo(message, context)
-	if not Owospeak:shouldowo(context.chatType, context.target) then
+	if not OwoSpeak:shouldowo(context.chatType, context.target) then
 		return;
 	end
 
-	return Owospeak.owoify(message);
+	return OwoSpeak.owoify(message);
 end
 
 local stage = LCF.Stage.EXCLUSIVE_TRANSFORM; -- wuns aftew othew message twansfowms
